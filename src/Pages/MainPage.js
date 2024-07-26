@@ -1,6 +1,7 @@
 import {
   BgColorsOutlined,
   PoweroffOutlined,
+  SaveOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import {
@@ -34,6 +35,8 @@ const MainPage = ({ primary, setPrimary }) => {
     switch (path) {
       case "/createflow":
         return "createflow";
+      case "/savedflows":
+        return "savedflows";
       default:
         return "";
     }
@@ -56,6 +59,11 @@ const MainPage = ({ primary, setPrimary }) => {
               key: "createflow",
               icon: <UserOutlined />,
               label: <Link to="/createflow">Create Flow</Link>,
+            },
+            {
+              key: "savedflows",
+              icon: <SaveOutlined />,
+              label: <Link to="/savedflows">Saved Flows</Link>,
             },
           ]}
         />

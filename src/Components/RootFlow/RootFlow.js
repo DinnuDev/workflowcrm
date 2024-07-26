@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   Controls,
   MarkerType,
@@ -9,13 +10,23 @@ import {
   useReactFlow,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
+import { Button } from "antd";
 import React, { useCallback, useRef } from "react";
 
+import ActionNode from "../CustomNodes/ActionNode";
+import CheckNode from "../CustomNodes/CheckNode";
+import TriggerNode from "../CustomNodes/TriggerNode";
 import Sidebar from "./Sidebar";
 import "./index.css";
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
+
+const nodeTypes = {
+  actionNode: ActionNode,
+  checkNode: CheckNode,
+  triggerNode: TriggerNode,
+};
 
 const RootFlow = () => {
   const reactFlowWrapper = useRef(null);
@@ -59,20 +70,38 @@ const RootFlow = () => {
       });
       const newNode = {
         id: getId(),
-        type,
+        type: `${type}Node`,
         position,
-        data: { label: `${type.charAt(0).toUpperCase() + type.slice(1)} node` },
+        data: {
+          label: `${type.charAt(0).toUpperCase() + type.slice(1)} node`,
+          onDelete: onDeleteNode,
+        },
       };
 
       setNodes((nds) => nds.concat(newNode));
     },
-    [screenToFlowPosition]
+    [screenToFlowPosition, setNodes]
   );
+
+  const onDeleteNode = (nodeId) => {
+    setNodes((nds) => nds.filter((node) => node.id !== nodeId));
+    setEdges((eds) =>
+      eds.filter((edge) => edge.source !== nodeId && edge.target !== nodeId)
+    );
+  };
+
+  const saveFlow = () => {
+    const flowData = { nodes, edges };
+    localStorage.setItem("flowData", JSON.stringify(flowData));
+    alert("Flow saved!");
+  };
 
   return (
     <div className="dndflow">
       <Sidebar />
-
+      <Button onClick={saveFlow} style={{ marginBottom: "10px" }}>
+        Save Flow
+      </Button>
       <div className="reactflow-wrapper" ref={reactFlowWrapper}>
         <ReactFlow
           nodes={nodes}
@@ -82,30 +111,11 @@ const RootFlow = () => {
           onConnect={onConnect}
           onDrop={onDrop}
           onDragOver={onDragOver}
+          nodeTypes={nodeTypes}
           fitView
         >
           <Controls />
           <MiniMap />
-          <svg width="0" height="0">
-            <defs>
-              <marker
-                id="arrow"
-                viewBox="0 0 10 10"
-                refX="10"
-                refY="5"
-                markerWidth="6"
-                markerHeight="6"
-                orient="auto"
-              >
-                <path
-                  d="M 0 0 L 10 5 L 0 10 z"
-                  fill="#555"
-                  stroke="#555"
-                  strokeWidth="1.5"
-                />
-              </marker>
-            </defs>
-          </svg>
         </ReactFlow>
       </div>
     </div>

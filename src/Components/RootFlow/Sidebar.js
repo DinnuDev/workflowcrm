@@ -11,19 +11,19 @@ const Sidebar = () => {
       id: "0",
       className: "dndnode input",
       name: "Action",
-      nodeType: "input",
+      nodeType: "action",
     },
     {
       id: "1",
       className: "dndnode default",
       name: "Check",
-      nodeType: "default",
+      nodeType: "check",
     },
     {
       id: "2",
       className: "dndnode output",
       name: "Trigger",
-      nodeType: "output",
+      nodeType: "trigger",
     },
   ];
 

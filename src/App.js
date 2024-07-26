@@ -12,6 +12,7 @@ import {
 } from "react-router-dom";
 import "./App.css";
 import RootFlow from "./Components/RootFlow/RootFlow.js";
+import SavedFlows from "./Components/SavedFlows/SavedFlows.js";
 import MainPage from "./Pages/MainPage.js";
 function fallbackRender({ error, resetErrorBoundary }) {
   return (
@@ -31,6 +32,7 @@ function App() {
         ></Route>
         <Route path="/" element={<MainPage />}>
           <Route path="/createflow" element={<RootFlow />}></Route>
+          <Route path="savedflows" element={<SavedFlows />} />
         </Route>
       </Route>
     )
