@@ -12,12 +12,14 @@ const nodeStyle = {
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
+  width: "150px",
+  height: "75px",
 };
 
 const ActionNode = ({ id, data }) => {
   return (
     <div style={nodeStyle}>
-      <Space align="baseline" direction="horizontal">
+      <Space align="center" direction="horizontal">
         <span>Action</span>
         <Button
           type="text"

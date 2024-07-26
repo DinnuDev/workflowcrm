@@ -10,7 +10,7 @@ const ellipticalNodeStyle = {
   backgroundColor: "#fff",
   border: "1px solid #ddd",
   width: "150px",
-  height: "100px",
+  height: "75px",
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
