@@ -1,5 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
+  Background,
+  BackgroundVariant,
   Controls,
   MiniMap,
   ReactFlow,
@@ -131,6 +133,7 @@ const RootFlow = () => {
         >
           <Controls />
           <MiniMap />
+          <Background variant={BackgroundVariant.Lines} />
         </ReactFlow>
       </div>
     </div>
