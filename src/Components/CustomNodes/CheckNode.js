@@ -22,6 +22,7 @@ const CheckNode = ({ id, data }) => {
         <Button
           type="text"
           shape="circle"
+          size="small"
           icon={<DeleteOutlined />}
           onClick={() => data.onDelete(id)}
         />

@@ -19,12 +19,6 @@ const Sidebar = () => {
       name: "Check",
       nodeType: "check",
     },
-    {
-      id: "2",
-      className: "dndnode output",
-      name: "Trigger",
-      nodeType: "trigger",
-    },
   ];
 
   const nodeStyle = {

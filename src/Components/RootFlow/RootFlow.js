@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   Controls,
-  MarkerType,
   MiniMap,
   ReactFlow,
   addEdge,
@@ -12,25 +11,40 @@ import {
 import "@xyflow/react/dist/style.css";
 import { Button } from "antd";
 import React, { useCallback, useRef } from "react";
-
 import ActionNode from "../CustomNodes/ActionNode";
 import CheckNode from "../CustomNodes/CheckNode";
-import TriggerNode from "../CustomNodes/TriggerNode";
+import EndNode from "../CustomNodes/EndNode";
+import StartNode from "../CustomNodes/StartNode";
 import Sidebar from "./Sidebar";
 import "./index.css";
-
 let id = 0;
 const getId = () => `dndnode_${id++}`;
 
 const nodeTypes = {
+  startNode: StartNode,
+  endNode: EndNode,
   actionNode: ActionNode,
   checkNode: CheckNode,
-  triggerNode: TriggerNode,
 };
+
+const initialNodes = [
+  {
+    id: "startNode",
+    type: "startNode",
+    position: { x: 250, y: 5 },
+    data: { label: "Start Node" },
+  },
+  {
+    id: "endNode",
+    type: "endNode",
+    position: { x: 250, y: 400 },
+    data: { label: "End Node" },
+  },
+];
 
 const RootFlow = () => {
   const reactFlowWrapper = useRef(null);
-  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const { screenToFlowPosition } = useReactFlow();
 
@@ -40,10 +54,11 @@ const RootFlow = () => {
         addEdge(
           {
             ...params,
-            markerEnd: { type: MarkerType.Arrow, color: "#FF0072" },
+            type: "step",
+            markerEnd: { color: "black" },
             style: {
               strokeWidth: 2,
-              stroke: "#FF0072",
+              stroke: "black",
             },
           },
           eds
