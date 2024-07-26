@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import {
   Background,
   BackgroundVariant,
@@ -19,6 +18,7 @@ import EndNode from "../CustomNodes/EndNode";
 import StartNode from "../CustomNodes/StartNode";
 import Sidebar from "./Sidebar";
 import "./index.css";
+
 let id = 0;
 const getId = () => `dndnode_${id++}`;
 
@@ -92,6 +92,8 @@ const RootFlow = () => {
         data: {
           label: `${type.charAt(0).toUpperCase() + type.slice(1)} node`,
           onDelete: onDeleteNode,
+          onEdit: onEditNode,
+          conditions: [],
         },
       };
 
@@ -104,6 +106,31 @@ const RootFlow = () => {
     setNodes((nds) => nds.filter((node) => node.id !== nodeId));
     setEdges((eds) =>
       eds.filter((edge) => edge.source !== nodeId && edge.target !== nodeId)
+    );
+  };
+
+  const onEditNode = (nodeId, conditions) => {
+    setNodes((nds) =>
+      nds.map((node) => {
+        if (node.id === nodeId) {
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              conditions,
+              label: `Conditions: ${conditions
+                .map(
+                  (cond) =>
+                    `${cond.field} ${cond.operator
+                      .replace(/&gt;/g, ">")
+                      .replace(/&lt;/g, "<")} ${cond.value}`
+                )
+                .join(", ")}`,
+            },
+          };
+        }
+        return node;
+      })
     );
   };
 
