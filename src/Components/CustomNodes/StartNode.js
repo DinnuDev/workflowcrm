@@ -2,11 +2,11 @@ import { Handle, Position } from "@xyflow/react";
 import { Space } from "antd";
 import React from "react";
 
-const ellipticalNodeStyle = {
+const startNodeStyle = {
   padding: "10px",
   borderRadius: "50%",
   boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
-  backgroundColor: "#fff",
+  backgroundColor: "#d3f9d8",
   border: "1px solid #ddd",
   width: "150px",
   height: "75px",
@@ -16,11 +16,12 @@ const ellipticalNodeStyle = {
   justifyContent: "center",
   position: "relative",
   textAlign: "center",
+  fontWeight: "bold",
 };
 
 const StartNode = ({ id, data }) => {
   return (
-    <div style={ellipticalNodeStyle}>
+    <div style={startNodeStyle}>
       <Space align="center" direction="horizontal">
         <span>Start</span>
         {/* <Button

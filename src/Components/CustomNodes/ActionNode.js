@@ -1,6 +1,11 @@
-import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  EyeOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import { Handle, Position } from "@xyflow/react";
-import { Button, Drawer, Form, Select, Space } from "antd";
+import { Button, Drawer, Form, Popover, Select, Space } from "antd";
 import React, { useState } from "react";
 
 const { Option } = Select;
@@ -9,7 +14,7 @@ const nodeStyle = {
   padding: "10px",
   borderRadius: "5px",
   boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
-  backgroundColor: "#fff",
+  backgroundColor: "#fff8dc", // Light blue background color
   border: "1px solid #ddd",
   display: "flex",
   alignItems: "center",
@@ -54,6 +59,20 @@ const ActionNode = ({ id, data }) => {
     closeDrawer();
   };
 
+  const popoverContent = (
+    <div>
+      {actions.length > 0 ? (
+        actions.map((action, index) => (
+          <div key={index}>
+            <strong>Action:</strong> {action.actionType}
+          </div>
+        ))
+      ) : (
+        <div>Empty</div>
+      )}
+    </div>
+  );
+
   return (
     <div
       style={{
@@ -66,6 +85,14 @@ const ActionNode = ({ id, data }) => {
       <div style={contentStyle}>
         <Space align="center" direction="horizontal">
           <span>Actions</span>
+          <Popover content={popoverContent} title="Actions">
+            <Button
+              type="text"
+              shape="circle"
+              size="small"
+              icon={<EyeOutlined />}
+            />
+          </Popover>
           <Button
             type="text"
             shape="circle"

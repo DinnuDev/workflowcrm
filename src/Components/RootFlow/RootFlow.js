@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   Background,
   BackgroundVariant,
@@ -71,7 +72,7 @@ const RootFlow = () => {
             type: "step",
             markerEnd: { color: "black" },
             style: {
-              strokeWidth: 2,
+              strokeWidth: 1,
               stroke: "black",
             },
           },
@@ -110,7 +111,7 @@ const RootFlow = () => {
         },
       };
 
-      setNodes((nds) => nds.concat(newNode));
+      setNodes((nds) => [...nds, newNode]); // Retain existing nodes and add new node
     },
     [screenToFlowPosition, setNodes]
   );

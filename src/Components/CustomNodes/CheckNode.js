@@ -1,6 +1,11 @@
-import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  EyeOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import { Handle, Position } from "@xyflow/react";
-import { Button, Drawer, Form, Input, Select, Space } from "antd";
+import { Button, Drawer, Form, Input, Popover, Select, Space } from "antd";
 import React, { useState } from "react";
 
 const { Option } = Select;
@@ -9,20 +14,23 @@ const nodeStyle = {
   padding: "10px",
   borderRadius: "5px",
   boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
-  backgroundColor: "#fff",
+  backgroundColor: "#e6f7ff", // Light blue background color
   border: "1px solid #ddd",
   display: "flex",
   alignItems: "center",
-  justifyContent: "space-between",
+  justifyContent: "center",
   width: "150px",
   height: "150px", // Adjusted for square shape
+  transform: "rotate(45deg)", // Rotate for rhombus shape
 };
 
 const contentStyle = {
-  width: "100%",
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
+  transform: "rotate(-45deg)", // Counter-rotate content to make it horizontal
+  width: "100%", // Ensure full width usage
+  height: "100%", // Ensure full height usage
 };
 
 const CheckNode = ({ id, data }) => {
@@ -54,18 +62,42 @@ const CheckNode = ({ id, data }) => {
     closeDrawer();
   };
 
+  const popoverContent = (
+    <div>
+      {conditions.length > 0 ? (
+        conditions.map((condition, index) => (
+          <div key={index}>
+            <strong>Field:</strong> {condition.field},
+            <strong> Operator:</strong> {condition.operator},
+            <strong> Value:</strong> {condition.value}
+          </div>
+        ))
+      ) : (
+        <div>Empty</div>
+      )}
+    </div>
+  );
+
   return (
     <div
       style={{
         ...nodeStyle,
         boxShadow: isSaved
-          ? "0 5px 15px rgba(0, 255, 0, 0.35)" // Change box shadow color to green
+          ? "0 5px 15px rgba(0, 255, 0, 0.25)" // Change box shadow color to green
           : nodeStyle.boxShadow,
       }}
     >
       <div style={contentStyle}>
         <Space align="center" direction="horizontal">
           <span>Checks</span>
+          <Popover content={popoverContent} title="Node Data">
+            <Button
+              type="text"
+              shape="circle"
+              size="small"
+              icon={<EyeOutlined />}
+            />
+          </Popover>
           <Button
             type="text"
             shape="circle"
