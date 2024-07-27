@@ -1,6 +1,5 @@
-import { DeleteOutlined } from "@ant-design/icons";
 import { Handle, Position } from "@xyflow/react";
-import { Button, Space } from "antd";
+import { Space } from "antd";
 import React from "react";
 
 const ellipticalNodeStyle = {
@@ -23,21 +22,21 @@ const EndNode = ({ id, data }) => {
     <div style={ellipticalNodeStyle}>
       <Space align="baseline" direction="horizontal">
         <span>End</span>
-        <Button
+        {/* <Button
           type="text"
           shape="circle"
           size="small"
           icon={<DeleteOutlined />}
           onClick={() => data.onDelete(id)}
           style={{ position: "absolute", top: "5px", right: "5px" }}
-        />
+        /> */}
       </Space>
       <Handle type="target" position={Position.Top} style={{ top: "0px" }} />
-      <Handle
+      {/* <Handle
         type="source"
         position={Position.Bottom}
         style={{ bottom: "0px" }}
-      />
+      /> */}
     </div>
   );
 };

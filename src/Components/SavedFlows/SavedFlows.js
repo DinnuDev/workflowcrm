@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Button, List, Modal } from "antd";
+import { Button, Card, List, Modal } from "antd";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -33,22 +33,25 @@ const SavedFlows = () => {
     <div style={{ padding: "20px" }}>
       <h2>Saved Flows</h2>
       <List
-        bordered
+        grid={{ gutter: 16, column: 4 }}
         dataSource={flows}
         renderItem={(flow, index) => (
-          <List.Item
-            actions={[
-              <Button
-                icon={<EditOutlined />}
-                onClick={() => editFlow(index)}
-              />,
-              <Button
-                icon={<DeleteOutlined />}
-                onClick={() => deleteFlow(index)}
-              />,
-            ]}
-          >
-            {`Flow ${index + 1}`}
+          <List.Item>
+            <Card
+              title={flow.name || `Flow ${index + 1}`}
+              actions={[
+                <Button
+                  icon={<EditOutlined />}
+                  onClick={() => editFlow(index)}
+                />,
+                <Button
+                  icon={<DeleteOutlined />}
+                  onClick={() => deleteFlow(index)}
+                />,
+              ]}
+            >
+              {flow.name || `Flow ${index + 1}`}
+            </Card>
           </List.Item>
         )}
       />

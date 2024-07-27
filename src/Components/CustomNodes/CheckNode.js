@@ -16,12 +16,9 @@ const nodeStyle = {
   justifyContent: "space-between",
   width: "150px",
   height: "150px", // Adjusted for square shape
-  transform: "rotate(45deg)", // Rotate the square
-  transformOrigin: "center", // Ensure the rotation is centered
 };
 
 const contentStyle = {
-  transform: "rotate(-45deg)", // Rotate the content back to horizontal
   width: "100%",
   display: "flex",
   alignItems: "center",
@@ -52,7 +49,7 @@ const CheckNode = ({ id, data }) => {
   };
 
   const handleSave = () => {
-    data.onEdit(id, conditions);
+    data.onEdit(id, { conditions, actions: data.actions || [] });
     setIsSaved(true);
     closeDrawer();
   };
@@ -85,8 +82,8 @@ const CheckNode = ({ id, data }) => {
           />
         </Space>
       </div>
-      <Handle type="source" position={Position.Right} />
       <Handle type="target" position={Position.Left} />
+      <Handle type="source" position={Position.Right} />
       <Drawer
         onClose={closeDrawer}
         open={drawerVisible}
@@ -107,7 +104,7 @@ const CheckNode = ({ id, data }) => {
       >
         <Form.Item>
           <Button type="dashed" onClick={addCondition} icon={<PlusOutlined />}>
-            Add Check
+            Add Condition
           </Button>
         </Form.Item>
         <Form layout="vertical">
@@ -117,42 +114,34 @@ const CheckNode = ({ id, data }) => {
               style={{ display: "flex", marginBottom: 8 }}
               align="baseline"
             >
-              <Form.Item>
+              <Form.Item style={{ width: "100px" }}>
                 <Select
-                  style={{ width: "100px" }}
-                  placeholder="Select field"
+                  placeholder="Field"
                   value={condition.field}
                   onChange={(value) =>
                     handleConditionChange(index, "field", value)
                   }
                 >
                   <Option value="FICO">FICO</Option>
-                  <Option value="State">State</Option>
-                  <Option value="Creditscore">Credit Score</Option>
+                  <Option value="LTV">LTV</Option>
+                  <Option value="DTI">DTI</Option>
                 </Select>
               </Form.Item>
-              <Form.Item>
+              <Form.Item style={{ width: "150px" }}>
                 <Select
-                  style={{ width: "75px" }}
-                  placeholder="Select operator"
+                  placeholder="Operator"
                   value={condition.operator}
                   onChange={(value) =>
                     handleConditionChange(index, "operator", value)
                   }
                 >
-                  <Option value="=">=</Option>
-                  <Option value="&gt;">&gt;</Option>
-                  <Option value="&lt;">&lt;</Option>
-                  <Option value="&gt;=">&gt;=</Option>
-                  <Option value="&lt;=">&lt;=</Option>
-                  <Option value="and">and</Option>
-                  <Option value="or">or</Option>
-                  <Option value="is">is</Option>
+                  <Option value=">">Greater than</Option>
+                  <Option value="<">Less than</Option>
+                  <Option value="=">Equal to</Option>
                 </Select>
               </Form.Item>
-              <Form.Item>
+              <Form.Item style={{ width: "70px" }}>
                 <Input
-                  style={{ width: "100px" }}
                   placeholder="Value"
                   value={condition.value}
                   onChange={(e) =>

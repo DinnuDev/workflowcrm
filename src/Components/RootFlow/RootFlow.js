@@ -10,8 +10,9 @@ import {
   useReactFlow,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { Button } from "antd";
-import React, { useCallback, useRef } from "react";
+import { Button, Input, Modal, message } from "antd";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import ActionNode from "../CustomNodes/ActionNode";
 import CheckNode from "../CustomNodes/CheckNode";
 import EndNode from "../CustomNodes/EndNode";
@@ -46,9 +47,20 @@ const initialNodes = [
 
 const RootFlow = () => {
   const reactFlowWrapper = useRef(null);
+  const location = useLocation();
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const { screenToFlowPosition } = useReactFlow();
+  const [flowName, setFlowName] = useState("");
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  useEffect(() => {
+    if (location.state && location.state.flowData) {
+      const { nodes, edges } = location.state.flowData;
+      setNodes(nodes);
+      setEdges(edges);
+    }
+  }, [location.state, setNodes, setEdges]);
 
   const onConnect = useCallback(
     (params) =>
@@ -94,6 +106,7 @@ const RootFlow = () => {
           onDelete: onDeleteNode,
           onEdit: onEditNode,
           conditions: [],
+          actions: [],
         },
       };
 
@@ -109,7 +122,7 @@ const RootFlow = () => {
     );
   };
 
-  const onEditNode = (nodeId, conditions) => {
+  const onEditNode = (nodeId, data) => {
     setNodes((nds) =>
       nds.map((node) => {
         if (node.id === nodeId) {
@@ -117,8 +130,8 @@ const RootFlow = () => {
             ...node,
             data: {
               ...node.data,
-              conditions,
-              label: `Conditions: ${conditions
+              ...data,
+              label: `Conditions: ${data.conditions
                 .map(
                   (cond) =>
                     `${cond.field} ${cond.operator
@@ -134,18 +147,46 @@ const RootFlow = () => {
     );
   };
 
-  const saveFlow = () => {
-    const flowData = { nodes, edges };
-    localStorage.setItem("flowData", JSON.stringify(flowData));
-    alert("Flow saved!");
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    if (flowName.trim() === "") {
+      message.error("Please enter a flow name.");
+      return;
+    }
+
+    const flowData = { nodes, edges, name: flowName };
+    const savedFlows = JSON.parse(localStorage.getItem("flows")) || [];
+    savedFlows.push(flowData);
+    localStorage.setItem("flows", JSON.stringify(savedFlows));
+    message.success("Flow saved successfully!");
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
   };
 
   return (
     <div className="dndflow">
       <Sidebar />
-      <Button onClick={saveFlow} style={{ marginBottom: "10px" }}>
+      <Button onClick={showModal} style={{ marginBottom: "10px" }}>
         Save Flow
       </Button>
+      <Modal
+        title="Save Flow"
+        visible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <Input
+          placeholder="Flow name"
+          value={flowName}
+          onChange={(e) => setFlowName(e.target.value)}
+        />
+      </Modal>
       <div className="reactflow-wrapper" ref={reactFlowWrapper}>
         <ReactFlow
           nodes={nodes}
