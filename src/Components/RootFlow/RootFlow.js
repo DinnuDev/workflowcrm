@@ -58,7 +58,7 @@ const RootFlow = () => {
   useEffect(() => {
     if (location.state && location.state.flowData) {
       const { nodes, edges } = location.state.flowData;
-      setNodes(nodes);
+      setNodes(nodes.map((node) => ({ ...node, id: getId() })));
       setEdges(edges);
     }
   }, [location.state, setNodes, setEdges]);
@@ -111,7 +111,7 @@ const RootFlow = () => {
         },
       };
 
-      setNodes((nds) => [...nds, newNode]); // Retain existing nodes and add new node
+      setNodes((nds) => [...nds, newNode]);
     },
     [screenToFlowPosition, setNodes]
   );

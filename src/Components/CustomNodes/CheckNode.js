@@ -115,7 +115,26 @@ const CheckNode = ({ id, data }) => {
         </Space>
       </div>
       <Handle type="target" position={Position.Left} />
-      <Handle type="source" position={Position.Right} />
+      <Handle
+        type="source"
+        position={Position.Right}
+        id="true"
+        style={{ top: "30%" }}
+      >
+        <span style={{ transform: "rotate(-45deg)", display: "block" }}>
+          True
+        </span>
+      </Handle>
+      <Handle
+        type="source"
+        position={Position.Right}
+        id="false"
+        style={{ top: "70%" }}
+      >
+        <span style={{ transform: "rotate(-45deg)", display: "block" }}>
+          False
+        </span>
+      </Handle>
       <Drawer
         onClose={closeDrawer}
         open={drawerVisible}
