@@ -127,6 +127,7 @@ const SavedFlows = () => {
         onCancel={() => setIsViewModalVisible(false)}
         footer={[
           <Button
+            type="text"
             key="copy"
             icon={<CopyOutlined />}
             onClick={() => copyToClipboard(selectedFlow)}
@@ -134,6 +135,7 @@ const SavedFlows = () => {
             Copy to Clipboard
           </Button>,
           <Button
+            type="text"
             key="json"
             icon={<FileTextOutlined />}
             onClick={() => exportToJson(selectedFlow)}
@@ -141,6 +143,7 @@ const SavedFlows = () => {
             Export to JSON
           </Button>,
           <Button
+            type="text"
             key="xml"
             icon={<FileTextOutlined />}
             onClick={() => exportToXml(selectedFlow)}
