@@ -4,16 +4,22 @@ import {
   EditOutlined,
   EyeOutlined,
   FileTextOutlined,
+  PlusOutlined,
 } from "@ant-design/icons";
-import { Button, Card, List, Modal, message } from "antd";
+import { Button, Card, List, message, Modal, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+const { Option } = Select;
 
 const SavedFlows = () => {
   const [flows, setFlows] = useState([]);
   const [isViewModalVisible, setIsViewModalVisible] = useState(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [isLinkModalVisible, setIsLinkModalVisible] = useState(false);
   const [selectedFlow, setSelectedFlow] = useState(null);
+  const [selectedLinkedFlows, setSelectedLinkedFlows] = useState([]);
+  const [availableFlows, setAvailableFlows] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -39,6 +45,15 @@ const SavedFlows = () => {
   const viewFlow = (index) => {
     setSelectedFlow(flows[index]);
     setIsViewModalVisible(true);
+  };
+
+  const openLinkModal = (index) => {
+    const currentFlow = flows[index];
+    const otherFlows = flows.filter((_, i) => i !== index);
+    setSelectedFlow(currentFlow);
+    setAvailableFlows(otherFlows);
+    setSelectedLinkedFlows(currentFlow.linkedFlows || []);
+    setIsLinkModalVisible(true);
   };
 
   const copyToClipboard = (data) => {
@@ -90,6 +105,18 @@ const SavedFlows = () => {
     document.body.removeChild(a);
   };
 
+  const saveLinkedFlows = () => {
+    const updatedFlow = { ...selectedFlow, linkedFlows: selectedLinkedFlows };
+    const updatedFlows = flows.map((flow) =>
+      flow === selectedFlow ? updatedFlow : flow
+    );
+    setFlows(updatedFlows);
+    localStorage.setItem("flows", JSON.stringify(updatedFlows));
+    setSelectedFlow(updatedFlow);
+    setIsLinkModalVisible(false);
+    message.success("Flows linked successfully!");
+  };
+
   return (
     <div style={{ padding: "20px" }}>
       <h2>Saved Flows</h2>
@@ -113,9 +140,23 @@ const SavedFlows = () => {
                   icon={<DeleteOutlined />}
                   onClick={() => deleteFlow(index)}
                 />,
+                <Button
+                  icon={<PlusOutlined />}
+                  onClick={() => openLinkModal(index)}
+                />,
               ]}
             >
               {flow.name || `Flow ${index + 1}`}
+              {flow.linkedFlows && flow.linkedFlows.length > 0 && (
+                <div>
+                  <h4>Linked Flows:</h4>
+                  <ul>
+                    {flow.linkedFlows.map((linkedFlowName) => (
+                      <li key={linkedFlowName}>{linkedFlowName}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </Card>
           </List.Item>
         )}
@@ -169,6 +210,29 @@ const SavedFlows = () => {
         cancelText="Cancel"
       >
         <p>Load this flow into the editor to make changes?</p>
+      </Modal>
+
+      <Modal
+        title="Link Flows"
+        open={isLinkModalVisible}
+        onOk={saveLinkedFlows}
+        onCancel={() => setIsLinkModalVisible(false)}
+        okText="Save"
+        cancelText="Cancel"
+      >
+        <Select
+          mode="multiple"
+          style={{ width: "100%" }}
+          placeholder="Select flows"
+          onChange={(value) => setSelectedLinkedFlows(value)}
+          value={selectedLinkedFlows}
+        >
+          {availableFlows.map((flow) => (
+            <Option key={flow.name} value={flow.name}>
+              {flow.name || `Flow ${flows.indexOf(flow) + 1}`}
+            </Option>
+          ))}
+        </Select>
       </Modal>
     </div>
   );
