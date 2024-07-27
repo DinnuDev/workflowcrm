@@ -1,6 +1,7 @@
+import { Button, Space } from "antd";
 import React from "react";
 
-const Sidebar = () => {
+const Sidebar = ({ showModal, resetFlow }) => {
   const onDragStart = (event, nodeType) => {
     event.dataTransfer.setData("application/reactflow", nodeType);
     event.dataTransfer.effectAllowed = "move";
@@ -38,21 +39,39 @@ const Sidebar = () => {
     padding: "10px",
     width: "200px",
     backgroundColor: "#f0f0f0",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    height: "75vh",
+  };
+
+  const buttonContainerStyle = {
+    marginTop: "auto",
   };
 
   return (
     <aside style={sidebarStyle}>
-      {listView.map((item) => (
-        <div
-          key={item.id}
-          className={item.className}
-          style={nodeStyle}
-          onDragStart={(event) => onDragStart(event, item.nodeType)}
-          draggable
-        >
-          {item.name}
-        </div>
-      ))}
+      <div>
+        {listView.map((item) => (
+          <div
+            key={item.id}
+            className={item.className}
+            style={nodeStyle}
+            onDragStart={(event) => onDragStart(event, item.nodeType)}
+            draggable
+          >
+            {item.name}
+          </div>
+        ))}
+      </div>
+      <Space direction="horizontal" style={buttonContainerStyle} align="center">
+        <Button onClick={showModal} style={{ marginBottom: "10px" }}>
+          Save Flow
+        </Button>
+        <Button onClick={resetFlow} style={{ marginBottom: "10px" }}>
+          Add New
+        </Button>
+      </Space>
     </aside>
   );
 };

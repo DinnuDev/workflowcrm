@@ -11,7 +11,7 @@ import {
   useReactFlow,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { Button, Input, Modal, message } from "antd";
+import { Input, Modal, message } from "antd";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import ActionNode from "../CustomNodes/ActionNode";
@@ -170,12 +170,14 @@ const RootFlow = () => {
     setIsModalVisible(false);
   };
 
+  const resetFlow = () => {
+    setNodes(initialNodes);
+    setEdges([]);
+  };
+
   return (
     <div className="dndflow">
-      <Sidebar />
-      <Button onClick={showModal} style={{ marginBottom: "10px" }}>
-        Save Flow
-      </Button>
+      <Sidebar showModal={showModal} resetFlow={resetFlow} />
       <Modal
         title="Save Flow"
         visible={isModalVisible}
