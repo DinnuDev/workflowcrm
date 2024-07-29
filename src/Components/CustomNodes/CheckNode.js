@@ -49,7 +49,7 @@ const CheckNode = ({ id, data }) => {
   const [validation, setValidation] = useState(
     data.validation || { field: "" }
   );
-  const [selectedSegment, setSelectedSegment] = useState("Conditions");
+  const [selectedSegment, setSelectedSegment] = useState("Statement");
   const [isSaved, setIsSaved] = useState(false);
 
   const showDrawer = () => {
@@ -191,11 +191,11 @@ const CheckNode = ({ id, data }) => {
       >
         <Space align="baseline" direction="vertical">
           <Segmented
-            options={["Conditions", "Validations"]}
+            options={["Statement", "Code"]}
             value={selectedSegment}
             onChange={(value) => setSelectedSegment(value)}
           />
-          {selectedSegment === "Conditions" ? (
+          {selectedSegment === "Statement" ? (
             <>
               <Form.Item>
                 <Button
@@ -203,7 +203,7 @@ const CheckNode = ({ id, data }) => {
                   onClick={addCondition}
                   icon={<PlusOutlined />}
                 >
-                  Add Expression
+                  Add Statement
                 </Button>
               </Form.Item>
               <Form layout="vertical">
@@ -256,7 +256,7 @@ const CheckNode = ({ id, data }) => {
             <Form layout="vertical">
               <Form.Item style={{ width: "150px" }}>
                 <Select
-                  placeholder="Validation"
+                  placeholder="Code"
                   value={validation.field}
                   onChange={handleValidationChange}
                 >
