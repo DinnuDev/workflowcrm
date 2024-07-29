@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import {
   Background,
   BackgroundVariant,
@@ -55,10 +54,48 @@ const RootFlow = () => {
   const [flowName, setFlowName] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
 
+  const onDeleteNode = useCallback(
+    (nodeId) => {
+      setNodes((nds) => nds.filter((node) => node.id !== nodeId));
+      setEdges((eds) =>
+        eds.filter((edge) => edge.source !== nodeId && edge.target !== nodeId)
+      );
+    },
+    [setNodes, setEdges]
+  );
+
+  const onEditNode = useCallback(
+    (nodeId, data) => {
+      setNodes((nds) =>
+        nds.map((node) => {
+          if (node.id === nodeId) {
+            return {
+              ...node,
+              data: {
+                ...node.data,
+                ...data,
+                label: `Conditions: ${data.conditions
+                  .map(
+                    (cond) =>
+                      `${cond.field} ${cond.operator
+                        .replace(/&gt;/g, ">")
+                        .replace(/&lt;/g, "<")} ${cond.value}`
+                  )
+                  .join(", ")}`,
+              },
+            };
+          }
+          return node;
+        })
+      );
+    },
+    [setNodes]
+  );
+
   useEffect(() => {
     if (location.state && location.state.flowData) {
       const { nodes, edges } = location.state.flowData;
-      setNodes(nodes.map((node) => ({ ...node, id: getId() })));
+      setNodes(nodes);
       setEdges(edges);
     }
   }, [location.state, setNodes, setEdges]);
@@ -79,7 +116,7 @@ const RootFlow = () => {
           eds
         )
       ),
-    []
+    [setEdges]
   );
 
   const onDragOver = useCallback((event) => {
@@ -113,46 +150,14 @@ const RootFlow = () => {
 
       setNodes((nds) => [...nds, newNode]);
     },
-    [screenToFlowPosition, setNodes]
+    [screenToFlowPosition, setNodes, onDeleteNode, onEditNode]
   );
 
-  const onDeleteNode = (nodeId) => {
-    setNodes((nds) => nds.filter((node) => node.id !== nodeId));
-    setEdges((eds) =>
-      eds.filter((edge) => edge.source !== nodeId && edge.target !== nodeId)
-    );
-  };
-
-  const onEditNode = (nodeId, data) => {
-    setNodes((nds) =>
-      nds.map((node) => {
-        if (node.id === nodeId) {
-          return {
-            ...node,
-            data: {
-              ...node.data,
-              ...data,
-              label: `Conditions: ${data.conditions
-                .map(
-                  (cond) =>
-                    `${cond.field} ${cond.operator
-                      .replace(/&gt;/g, ">")
-                      .replace(/&lt;/g, "<")} ${cond.value}`
-                )
-                .join(", ")}`,
-            },
-          };
-        }
-        return node;
-      })
-    );
-  };
-
-  const showModal = () => {
+  const showModal = useCallback(() => {
     setIsModalVisible(true);
-  };
+  }, []);
 
-  const handleOk = () => {
+  const handleOk = useCallback(() => {
     if (flowName.trim() === "") {
       message.error("Please enter a flow name.");
       return;
@@ -164,16 +169,16 @@ const RootFlow = () => {
     localStorage.setItem("flows", JSON.stringify(savedFlows));
     message.success("Flow saved successfully!");
     setIsModalVisible(false);
-  };
+  }, [flowName, nodes, edges]);
 
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     setIsModalVisible(false);
-  };
+  }, []);
 
-  const resetFlow = () => {
+  const resetFlow = useCallback(() => {
     setNodes(initialNodes);
     setEdges([]);
-  };
+  }, [setNodes, setEdges]);
 
   return (
     <div className="dndflow">
