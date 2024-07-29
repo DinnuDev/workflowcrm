@@ -28,6 +28,7 @@ const contentStyle = {
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
+  flexDirection: "column",
 };
 
 const ActionNode = ({ id, data }) => {
@@ -83,31 +84,35 @@ const ActionNode = ({ id, data }) => {
       }}
     >
       <div style={contentStyle}>
-        <Space align="center" direction="horizontal">
+        <div>
           <span>Actions</span>
-          <Popover content={popoverContent} title="Actions">
+        </div>
+        <div style={{ margin: "auto" }}>
+          <Space align="center" direction="horizontal">
+            <Popover content={popoverContent} title="Actions">
+              <Button
+                type="text"
+                shape="circle"
+                size="small"
+                icon={<EyeOutlined />}
+              />
+            </Popover>
             <Button
               type="text"
               shape="circle"
               size="small"
-              icon={<EyeOutlined />}
+              icon={<EditOutlined />}
+              onClick={showDrawer}
             />
-          </Popover>
-          <Button
-            type="text"
-            shape="circle"
-            size="small"
-            icon={<EditOutlined />}
-            onClick={showDrawer}
-          />
-          <Button
-            type="text"
-            shape="circle"
-            size="small"
-            icon={<DeleteOutlined />}
-            onClick={() => data.onDelete(id)}
-          />
-        </Space>
+            <Button
+              type="text"
+              shape="circle"
+              size="small"
+              icon={<DeleteOutlined />}
+              onClick={() => data.onDelete(id)}
+            />
+          </Space>
+        </div>
       </div>
       <Handle type="target" position={Position.Left} />
       <Handle type="source" position={Position.Right} />

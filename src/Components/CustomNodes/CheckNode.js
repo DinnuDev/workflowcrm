@@ -27,10 +27,11 @@ const nodeStyle = {
 const contentStyle = {
   display: "flex",
   alignItems: "center",
-  justifyContent: "space-between",
+  justifyContent: "center",
   transform: "rotate(-45deg)", // Counter-rotate content to make it horizontal
   width: "100%", // Ensure full width usage
   height: "100%", // Ensure full height usage
+  flexDirection: "column",
 };
 
 const CheckNode = ({ id, data }) => {
@@ -88,31 +89,37 @@ const CheckNode = ({ id, data }) => {
       }}
     >
       <div style={contentStyle}>
-        <Space align="center" direction="horizontal">
-          <span>Checks</span>
-          <Popover content={popoverContent} title="Node Data">
+        <div>
+          <Space align="center" direction="horizontal">
+            <span>Checks</span>
+          </Space>
+        </div>
+        <div>
+          <Space align="center" direction="horizontal">
+            <Popover content={popoverContent} title="Node Data">
+              <Button
+                type="text"
+                shape="circle"
+                size="small"
+                icon={<EyeOutlined />}
+              />
+            </Popover>
             <Button
               type="text"
               shape="circle"
               size="small"
-              icon={<EyeOutlined />}
+              icon={<EditOutlined />}
+              onClick={showDrawer}
             />
-          </Popover>
-          <Button
-            type="text"
-            shape="circle"
-            size="small"
-            icon={<EditOutlined />}
-            onClick={showDrawer}
-          />
-          <Button
-            type="text"
-            shape="circle"
-            size="small"
-            icon={<DeleteOutlined />}
-            onClick={() => data.onDelete(id)}
-          />
-        </Space>
+            <Button
+              type="text"
+              shape="circle"
+              size="small"
+              icon={<DeleteOutlined />}
+              onClick={() => data.onDelete(id)}
+            />
+          </Space>
+        </div>
       </div>
       <Handle type="target" position={Position.Left} />
       <Handle
