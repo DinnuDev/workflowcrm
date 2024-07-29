@@ -75,12 +75,12 @@ const CheckNode = ({ id, data }) => {
   };
 
   const handleSave = () => {
+    const updatedData = {
+      conditions,
+      validation,
+    };
     if (typeof data.onEdit === "function") {
-      if (selectedSegment === "Conditions") {
-        data.onEdit(id, { conditions });
-      } else {
-        data.onEdit(id, { validation });
-      }
+      data.onEdit(id, updatedData);
     } else {
       console.error("data.onEdit is not a function");
     }
@@ -194,6 +194,7 @@ const CheckNode = ({ id, data }) => {
             options={["Statement", "Code"]}
             value={selectedSegment}
             onChange={(value) => setSelectedSegment(value)}
+            style={{ backgroundColor: "#aac5f2", fontWeight: 700 }}
           />
           {selectedSegment === "Statement" ? (
             <>
